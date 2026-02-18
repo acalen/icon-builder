@@ -1,0 +1,5 @@
+[
+  { "id": "warden", "name": "Warden", "description": "Testing description." },
+  { "id": "striker", "name": "Striker", "description": "Testing description." },
+  { "id": "mystic", "name": "Mystic", "description": "Testing description." }
+]

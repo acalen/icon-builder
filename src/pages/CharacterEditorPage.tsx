@@ -2,12 +2,7 @@ import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useStore } from "../app/store";
 import { deriveCharacter } from "../rules/derive";
-
-const CLASS_OPTIONS = [
-  { id: "warden", label: "Warden (placeholder)" },
-  { id: "striker", label: "Striker (placeholder)" },
-  { id: "mystic", label: "Mystic (placeholder)" },
-];
+import { CLASSES, getClassById } from "../data/loadClasses";
 
 export function CharacterEditorPage() {
   const { id } = useParams();
@@ -24,6 +19,8 @@ export function CharacterEditorPage() {
       </div>
     );
   }
+
+  const selectedClass = getClassById(character.classId);
 
   return (
     <div style={{ padding: 24, maxWidth: 1100, margin: "0 auto" }}>
@@ -70,13 +67,19 @@ export function CharacterEditorPage() {
               }
             >
               <option value="">— Select —</option>
-              {CLASS_OPTIONS.map((o) => (
-                <option key={o.id} value={o.id}>
-                  {o.label}
+              {CLASSES.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
                 </option>
               ))}
             </select>
           </label>
+
+          {selectedClass?.description ? (
+                <div style={{ marginTop: 8, opacity: 0.8}}>
+                    {selectedClass.description}
+                </div>
+            ) : null}
 
           {derived && derived.warnings.length > 0 ? (
             <div style={{ marginTop: 12, padding: 10, border: "1px solid #f0c", borderRadius: 8 }}>
