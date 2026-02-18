@@ -81,6 +81,16 @@ export function CharacterEditorPage() {
                 </div>
             ) : null}
 
+          {derived?.stats ? (
+            <div style={{ marginTop: 12, padding: 10, border: "1px solid #ddd", borderRadius: 8 }}>
+              <b>Derived Stats</b>
+              <div>HP: {derived.stats.hp}</div>
+              <div>DEF: {derived.stats.def}</div>
+              <div>ATK: {derived.stats.atk}</div>
+            </div>
+          ) : null}
+
+
           {derived && derived.warnings.length > 0 ? (
             <div style={{ marginTop: 12, padding: 10, border: "1px solid #f0c", borderRadius: 8 }}>
               <b>Warnings</b>

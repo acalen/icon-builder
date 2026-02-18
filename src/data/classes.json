@@ -1,5 +1,20 @@
 [
-  { "id": "warden", "name": "Warden", "description": "Testing description." },
-  { "id": "striker", "name": "Striker", "description": "Testing description." },
-  { "id": "mystic", "name": "Mystic", "description": "Testing description." }
+  {
+    "id": "warden",
+    "name": "Warden",
+    "description": "Placeholder description.",
+    "base": { "hp": 12, "def": 2, "atk": 1 }
+  },
+  {
+    "id": "striker",
+    "name": "Striker",
+    "description": "Placeholder description.",
+    "base": { "hp": 10, "def": 1, "atk": 3 }
+  },
+  {
+    "id": "mystic",
+    "name": "Mystic",
+    "description": "Placeholder description.",
+    "base": { "hp": 9, "def": 1, "atk": 2 }
+  }
 ]
