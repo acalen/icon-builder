@@ -21,6 +21,25 @@ export function CharacterEditorPage() {
     );
   }
 
+  const c = character;
+
+  function toggleTalent(talentId: string) {
+    const has = c.talentIds.includes(talentId);
+    const next = has
+      ? c.talentIds.filter((id) => id !== talentId)
+      : [...c.talentIds, talentId];
+
+    // enforce max 2 (UI-level guard)
+    if (!has && next.length > 2) return;
+
+    dispatch({
+      type: "character/update",
+      id: c.id,
+      patch: { talentIds: next },
+    });
+  }
+
+
   const selectedClass = getClassById(character.classId);
 
   return (
@@ -91,26 +110,29 @@ export function CharacterEditorPage() {
             </div>
           ) : null}
 
-          <label style={{ display: "grid", gap: 6, marginBottom: 12 }}>
-            <span>Talent (pick 1)</span>
-            <select
-              value={character.talentId ?? ""}
-              onChange={(e) =>
-                dispatch({
-                  type: "character/update",
-                  id: character.id,
-                  patch: { talentId: e.target.value ? e.target.value : null },
-                })
-              }
-            >
-              <option value="">— Select —</option>
-              {TALENTS.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name}
-                </option>
-              ))}
-            </select>
-          </label>
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ marginBottom: 6 }}>Talents (pick up to 2)</div>
+            <div style={{ display: "grid", gap: 6 }}>
+              {TALENTS.map((t) => {
+                const checked = c.talentIds.includes(t.id);
+                const disabled = !checked && c.talentIds.length >= 2;
+
+                return (
+                  <label key={t.id} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      disabled={disabled}
+                      onChange={() => toggleTalent(t.id)}
+                    />
+                    <span>
+                      <b>{t.name}</b> — {t.description}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+          </div>
 
 
           {derived && derived.warnings.length > 0 ? (

@@ -1,6 +1,6 @@
 import type { Character } from "../models/character";
 import { getClassById } from "../data/loadClasses";
-import { getTalentById } from "../data/loadTalents";
+import { getTalentsByIds } from "../data/loadTalents";
 
 export type DerivedCharacter = {
   displayName: string;
@@ -20,8 +20,12 @@ export function deriveCharacter(c: Character): DerivedCharacter {
   const classDef = getClassById(c.classId);
   if (!classDef) warnings.push("No class selected.");
 
-  const talentDef = getTalentById(c.talentId);
-  if (!talentDef) warnings.push("Select exactly 1 talent.");
+  const talents = getTalentsByIds(c.talentIds);
+
+  // Rule: up to 2 talents
+  if (c.talentIds.length === 0) warnings.push("Select at least 1 talent.");
+  if (c.talentIds.length > 2) warnings.push("Select no more than 2 talents.");
+
 
   if (!classDef) {
     return {
@@ -35,10 +39,10 @@ export function deriveCharacter(c: Character): DerivedCharacter {
   const stats = { ...classDef.base };
 
   // Apply talent modifiers if present
-  if (talentDef) {
-    stats.hp += talentDef.modifiers.hp ?? 0;
-    stats.def += talentDef.modifiers.def ?? 0;
-    stats.atk += talentDef.modifiers.atk ?? 0;
+  for (const t of talents) {
+    stats.hp += t.modifiers.hp ?? 0;
+    stats.def += t.modifiers.def ?? 0;
+    stats.atk += t.modifiers.atk ?? 0;
   }
 
   return {

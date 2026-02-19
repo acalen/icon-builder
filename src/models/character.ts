@@ -5,7 +5,7 @@ export type Character = {
   name: string;
   concept: string;
   classId: string | null;   // placeholder until we implement ICON real options
-  talentId: string | null;
+  talentIds: string[];
   createdAt: string;        // ISO timestamp
   updatedAt: string;        // ISO timestamp
 };
@@ -17,7 +17,7 @@ export function newCharacter(): Character {
     name: "New Character",
     concept: "",
     classId: null,
-    talentId: null,
+    talentIds: [],
     createdAt: now,
     updatedAt: now,
   };
