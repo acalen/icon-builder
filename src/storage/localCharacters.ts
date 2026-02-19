@@ -17,12 +17,16 @@ function normalizeCharacter(raw: any): Character | null {
     raw.talentId ? [String(raw.talentId)] :
     [];
 
+  const gearIds = 
+    Array.isArray(raw.gearIds) ? raw.gearIds.map(String) : [];
+
   return {
     id,
     name: String(raw.name ?? "New Character"),
     concept: String(raw.concept ?? ""),
     classId: raw.classId ? String(raw.classId) : null,
     talentIds,
+    gearIds,
     createdAt: String(raw.createdAt ?? now),
     updatedAt: String(raw.updatedAt ?? now),
   };

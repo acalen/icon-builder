@@ -4,6 +4,7 @@ import { useStore } from "../app/store";
 import { deriveCharacter } from "../rules/derive";
 import { CLASSES, getClassById } from "../data/loadClasses";
 import { TALENTS } from "../data/loadTalents";
+import { GEAR } from "../data/loadGear";
 
 export function CharacterEditorPage() {
   const { id } = useParams();
@@ -39,6 +40,18 @@ export function CharacterEditorPage() {
     });
   }
 
+  function toggleGear(gearId: string) {
+    const has = c.gearIds.includes(gearId);
+    const next = has
+      ? c.gearIds.filter(id => id !== gearId)
+      : [...c.gearIds, gearId];
+
+    dispatch({
+      type: "character/update",
+      id: c.id,
+      patch: { gearIds: next },
+    });
+  }
 
   const selectedClass = getClassById(character.classId);
 
@@ -134,6 +147,29 @@ export function CharacterEditorPage() {
             </div>
           </div>
 
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ marginBottom: 6 }}>Gear</div>
+            <div style={{ display: "grid", gap: 6 }}>
+              {GEAR.map((g) => {
+                const checked = c.gearIds.includes(g.id);
+                const disabled = !checked && c.gearIds.length >= 2;
+
+                return (
+                  <label key={g.id} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      disabled={disabled}
+                      onChange={() => toggleGear(g.id)}
+                    />
+                    <span>
+                      <b>{g.name}</b> — {g.description}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+          </div>
 
           {derived && derived.warnings.length > 0 ? (
             <div style={{ marginTop: 12, padding: 10, border: "1px solid #f0c", borderRadius: 8 }}>

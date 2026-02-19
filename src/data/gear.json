@@ -1,0 +1,20 @@
+[
+  {
+    "id": "longsword",
+    "name": "Longsword",
+    "description": "+2 ATK",
+    "modifiers": [{ "type": "stat", "stat": "atk", "value": 2 }]
+  },
+  {
+    "id": "shield",
+    "name": "Shield",
+    "description": "+2 DEF",
+    "modifiers": [{ "type": "stat", "stat": "def", "value": 2 }]
+  },
+  {
+    "id": "amulet",
+    "name": "Amulet of Vitality",
+    "description": "+5 HP",
+    "modifiers": [{ "type": "stat", "stat": "hp", "value": 5 }]
+  }
+]
