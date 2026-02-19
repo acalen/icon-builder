@@ -123,6 +123,13 @@ export function CharacterEditorPage() {
             </div>
           ) : null}
 
+          {derived?.computed ? (
+            <div style={{ marginTop: 12, padding: 10, border: "1px solid #ddd", borderRadius: 8 }}>
+              <b>Computed</b>
+              <div>Final HP: {derived.computed.finalHp}</div>
+            </div>
+          ) : null}
+
           <div style={{ marginBottom: 12 }}>
             <div style={{ marginBottom: 6 }}>Talents (pick up to 2)</div>
             <div style={{ display: "grid", gap: 6 }}>

@@ -1,17 +1,15 @@
 import type { Character } from "../models/character";
 import { getClassById } from "../data/loadClasses";
 import { getTalentsByIds } from "../data/loadTalents";
-import { applyModifiers } from "./modifiers";
 import { getGearByIds } from "../data/loadGear";
+import { applyModifiers, type Stats } from "./modifiers";
+import { computeFromStats, type ComputedStats } from "./compute";
 
 export type DerivedCharacter = {
   displayName: string;
   warnings: string[];
-  stats: {
-    hp: number;
-    def: number;
-    atk: number;
-  } | null;
+  stats: Stats | null;
+  computed: ComputedStats | null;
 };
 
 export function deriveCharacter(c: Character): DerivedCharacter {
@@ -31,25 +29,24 @@ export function deriveCharacter(c: Character): DerivedCharacter {
       displayName: c.name.trim() || "Unnamed Character",
       warnings,
       stats: null,
+      computed: null,
     };
   }
 
   const talents = getTalentsByIds(c.talentIds);
-
-  // Gather modifiers from all selected talents
-  const talentMods = talents.flatMap((t) => t.modifiers);
-
-  // Gather modifiers from gear
   const gear = getGearByIds(c.gearIds);
-  const gearMods = gear.flatMap(g => g.modifiers)
 
-  // Start with base stats (copy) then apply mods
+  const talentMods = talents.flatMap((t) => t.modifiers);
+  const gearMods = gear.flatMap((g) => g.modifiers);
   const allMods = [...talentMods, ...gearMods];
+
   const stats = applyModifiers({ ...classDef.base }, allMods);
+  const computed = computeFromStats(stats);
 
   return {
     displayName: c.name.trim() || "Unnamed Character",
     warnings,
     stats,
+    computed,
   };
 }
