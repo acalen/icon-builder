@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useStore } from "../app/store";
 import { deriveCharacter } from "../rules/derive";
 import { CLASSES, getClassById } from "../data/loadClasses";
+import { TALENTS } from "../data/loadTalents";
 
 export function CharacterEditorPage() {
   const { id } = useParams();
@@ -89,6 +90,27 @@ export function CharacterEditorPage() {
               <div>ATK: {derived.stats.atk}</div>
             </div>
           ) : null}
+
+          <label style={{ display: "grid", gap: 6, marginBottom: 12 }}>
+            <span>Talent (pick 1)</span>
+            <select
+              value={character.talentId ?? ""}
+              onChange={(e) =>
+                dispatch({
+                  type: "character/update",
+                  id: character.id,
+                  patch: { talentId: e.target.value ? e.target.value : null },
+                })
+              }
+            >
+              <option value="">— Select —</option>
+              {TALENTS.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name}
+                </option>
+              ))}
+            </select>
+          </label>
 
 
           {derived && derived.warnings.length > 0 ? (
