@@ -3,18 +3,24 @@
     "id": "power_strike",
     "name": "Power Strike",
     "description": "+1 ATK",
-    "modifiers": { "atk": 1 }
+    "modifiers": [
+        { "type": "stat", "stat": "atk", "value": 1 }
+    ]
   },
   {
     "id": "iron_skin",
     "name": "Iron Skin",
     "description": "+2 DEF",
-    "modifiers": { "def": 2 }
+    "modifiers": [
+        { "type": "stat", "stat": "def", "value": 2 }
+    ]
   },
   {
     "id": "vitality",
     "name": "Vitality",
     "description": "+3 HP",
-    "modifiers": { "hp": 3 }
+    "modifiers": [
+        { "type": "stat", "stat": "hp", "value": 3 }
+    ]
   }
 ]

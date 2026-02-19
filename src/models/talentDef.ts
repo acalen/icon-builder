@@ -1,14 +1,10 @@
-export type TalentId = string;
+import type { Modifier } from "./modifier";
 
-export type TalentModifiers = {
-  hp?: number;
-  def?: number;
-  atk?: number;
-};
+export type TalentId = string;
 
 export type TalentDef = {
   id: TalentId;
   name: string;
   description: string;
-  modifiers: TalentModifiers;
+  modifiers: Modifier[];
 };
