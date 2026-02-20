@@ -44,10 +44,18 @@ export function deriveCharacter(c: Character): DerivedCharacter {
   const stats = applyModifiers({ ...classDef.base }, allMods);
   const computed = computeFromStats(stats);
 
-  // Validate selected talents against current stats
-  const talentIssues = talents.flatMap((t) => checkRequirements(c, stats, t.requires));
-  if (talentIssues.length > 0) {
-    warnings.push(...talentIssues.map((i) => i.message));
+  // Validate each selected talent against stats that do NOT include that talent's own modifiers
+  for (const t of talents) {
+    const statsWithoutThisTalent = applyModifiers(
+      { ...classDef.base },
+      [
+        ...gearMods,
+        ...talents.filter((x) => x.id !== t.id).flatMap((x) => x.modifiers),
+      ]
+    );
+
+    const issues = checkRequirements(c, statsWithoutThisTalent, t.requires);
+    if (issues.length > 0) warnings.push(...issues.map((i) => `${t.name}: ${i.message}`));
   }
 
   return {

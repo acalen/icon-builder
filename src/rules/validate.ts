@@ -42,10 +42,8 @@ export function checkRequirements(
         break;
       }
 
-      default: {
-        const _never: never = r;
+      default:
         return issues;
-      }
     }
   }
 
