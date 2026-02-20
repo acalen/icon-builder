@@ -4,6 +4,7 @@ import { getTalentsByIds } from "../data/loadTalents";
 import { getGearByIds } from "../data/loadGear";
 import { applyModifiers, type Stats } from "./modifiers";
 import { computeFromStats, type ComputedStats } from "./compute";
+import { checkRequirements } from "./validate";
 
 export type DerivedCharacter = {
   displayName: string;
@@ -42,6 +43,12 @@ export function deriveCharacter(c: Character): DerivedCharacter {
 
   const stats = applyModifiers({ ...classDef.base }, allMods);
   const computed = computeFromStats(stats);
+
+  // Validate selected talents against current stats
+  const talentIssues = talents.flatMap((t) => checkRequirements(c, stats, t.requires));
+  if (talentIssues.length > 0) {
+    warnings.push(...talentIssues.map((i) => i.message));
+  }
 
   return {
     displayName: c.name.trim() || "Unnamed Character",

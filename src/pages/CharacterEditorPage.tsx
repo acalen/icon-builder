@@ -5,6 +5,7 @@ import { deriveCharacter } from "../rules/derive";
 import { CLASSES, getClassById } from "../data/loadClasses";
 import { TALENTS } from "../data/loadTalents";
 import { GEAR } from "../data/loadGear";
+import { checkRequirements } from "../rules/validate";
 
 export function CharacterEditorPage() {
   const { id } = useParams();
@@ -135,20 +136,33 @@ export function CharacterEditorPage() {
             <div style={{ display: "grid", gap: 6 }}>
               {TALENTS.map((t) => {
                 const checked = c.talentIds.includes(t.id);
-                const disabled = !checked && c.talentIds.length >= 2;
+                const issues = checkRequirements(c, derived?.stats ?? null, t.requires);
+                const reqFail = issues.length > 0;
+
+                const disabled = 
+                  (!checked && c.talentIds.length >= 2) ||
+                  (!checked && reqFail);
 
                 return (
-                  <label key={t.id} style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      disabled={disabled}
-                      onChange={() => toggleTalent(t.id)}
-                    />
-                    <span>
-                      <b>{t.name}</b> — {t.description}
-                    </span>
-                  </label>
+                  <div key={t.id}>
+                    <label style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        disabled={disabled}
+                        onChange={() => toggleTalent(t.id)}
+                      />
+                      <span>
+                        <b>{t.name}</b> — {t.description}
+                      </span>
+                    </label>
+
+                    {!checked && issues.length > 0 ? (
+                      <div style={{ fontSize: 12, opacity: 0.7, marginLeft: 26 }}>
+                        {issues.map((i) => i.message).join("; ")}
+                      </div>
+                    ) : null}
+                  </div>
                 );
               })}
             </div>
